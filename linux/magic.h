@@ -68,6 +68,74 @@
 #define kern_off_pstate_before_shutdown 0x20734E
 #define kern_off_set_nclk_mem_spd 0x19A390
 
+#elif defined PS4_7_00 //tihmstar EchoStretch
+#define kern_off_printf 0x0BC730
+#define kern_off_snprintf 0x0BCA30
+#define kern_off_copyin 0x02F230
+#define kern_off_copyout 0x02F140
+#define kern_off_copyinstr 0x02F6E0
+#define kern_off_kmem_alloc_contig 0x430780
+#define kern_off_kmem_free 0x1172C0
+#define kern_off_pmap_extract 0x3DED30
+#define kern_off_pmap_protect 0x3DFF70
+#define kern_off_sched_pin 0x329870
+#define kern_off_sched_unpin 0x329890
+#define kern_off_smp_rendezvous 0x4447A0
+#define kern_off_smp_no_rendevous_barrier 0x444560
+#define kern_off_icc_query_nowait 0x3B2F80
+#define kern_off_kernel_map 0x21C8EE0
+#define kern_off_sysent 0x1125660
+#define kern_off_kernel_pmap_store 0x22c5268
+#define kern_off_Starsha_UcodeInfo 0
+#define kern_off_gpu_devid_is_9924 0x4EE3C0
+#define kern_off_gc_get_fw_info 0x4F6830
+#define kern_off_pml4pml4i 0x22C5258
+#define kern_off_dmpml4i 0x22C525C
+#define kern_off_dmpdpi 0x22C5260
+#define kern_off_eap_hdd_key 0x26E0CD0
+#define kern_off_edid 0x27645E0
+#define kern_off_wlanbt 0x0DECB0
+#define kern_off_kern_reboot 0x2CD780
+#define kern_off_set_gpu_freq 0x4F5350
+#define kern_off_set_pstate 0x4EF6C0
+#define kern_off_update_vddnp 0x4F5910
+#define kern_off_set_cu_power_gate 0x4F5D20
+#define kern_off_pstate_before_shutdown 0x2CDD6E
+
+#elif defined PS4_7_02 //tihmstar EchoStretch
+#define kern_off_printf 0x0BC730
+#define kern_off_snprintf 0x0BCA30
+#define kern_off_copyin 0x02F230
+#define kern_off_copyout 0x02F140
+#define kern_off_copyinstr 0x02F6E0
+#define kern_off_kmem_alloc_contig 0x430780
+#define kern_off_kmem_free 0x1172C0
+#define kern_off_pmap_extract 0x3DED30
+#define kern_off_pmap_protect 0x3E18A0
+#define kern_off_sched_pin 0x329870
+#define kern_off_sched_unpin 0x329890
+#define kern_off_smp_rendezvous 0x4447A0
+#define kern_off_smp_no_rendevous_barrier 0x444560
+#define kern_off_icc_query_nowait 0x3B2F80
+#define kern_off_kernel_map 0x21C8EE0
+#define kern_off_sysent 0x1125660
+#define kern_off_kernel_pmap_store 0x22c5268
+#define kern_off_Starsha_UcodeInfo 0
+#define kern_off_gpu_devid_is_9924 0x4EE3C0
+#define kern_off_gc_get_fw_info 0x4F6830
+#define kern_off_pml4pml4i 0x22C5258
+#define kern_off_dmpml4i 0x22C525C
+#define kern_off_dmpdpi 0x22C5260
+#define kern_off_eap_hdd_key 0x26E0CD0
+#define kern_off_edid 0x27645E0
+#define kern_off_wlanbt 0x0DECB0
+#define kern_off_kern_reboot 0x2CD780
+#define kern_off_set_gpu_freq 0x4F5350
+#define kern_off_set_pstate 0x4EF6C0
+#define kern_off_update_vddnp 0x4F5910
+#define kern_off_set_cu_power_gate 0x4F5D20
+#define kern_off_pstate_before_shutdown 0x2CDD6E
+
 #elif defined PS4_9_00 //codedwrench
 #define kern_off_printf	0x0B7A30
 #define kern_off_snprintf 0x0B7D30
