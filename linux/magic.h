@@ -458,7 +458,7 @@
 #define kern_off_copyout 0x2BD5C0
 #define kern_off_copyinstr 0x2BDB60
 #define kern_off_kmem_alloc_contig 0x24D410
-#define kern_off_kmem_free 0x465BF4
+#define kern_off_kmem_free 0x465BF0
 #define kern_off_pmap_extract 0x573D0
 #define kern_off_pmap_protect 0x58570
 #define kern_off_sched_pin 0x231640
@@ -483,7 +483,7 @@
 #define kern_off_set_pstate 0x4BBE40
 #define kern_off_update_vddnp 0x4BA010
 #define kern_off_set_cu_power_gate 0x4BA420
-#define kern_off_pstate_before_shutdown 0x3A239F
+#define kern_off_pstate_before_shutdown 0x3A23A0
 #define kern_off_set_nclk_mem_spd 0
 
 #endif
