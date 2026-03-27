@@ -7,6 +7,9 @@
 #ifdef __7_00__
 #include "700.h"
 #else
+#ifdef __7_50__
+#include "750.h"
+#else
 #ifdef __9_00__
 #include "900.h"
 #else
@@ -44,6 +47,7 @@
 #include "1302.h"
 #else
 #error "unsupported firmware"
+#endif
 #endif
 #endif
 #endif

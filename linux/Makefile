@@ -1,13 +1,11 @@
-FIRMWARES = 505 672 700 900 903 960 1000 1050 1100 1102 1150 1200 1250 1300 1302
+FIRMWARES = 505 672 700 750 900 903 960 1000 1050 1100 1102 1150 1200 1250 1300 1302
 SIZES     = 256mb 512mb 1gb 2gb 3gb 4gb
 
 # Generate payload targets automatically
 PAYLOADS = $(foreach fw,$(FIRMWARES), \
              $(foreach sz,$(SIZES), \
                fw$(fw)/payload-$(fw)-$(sz).bin \
-               fw$(fw)/payload-$(fw)-$(sz)-pro.bin \
-               fw$(fw)/payload-$(fw)-$(sz)-baikal.bin \
-               fw$(fw)/payload-$(fw)-$(sz)-pro-baikal.bin))
+               fw$(fw)/payload-$(fw)-$(sz)-baikal.bin))
 
 # Common compiler flags
 CC = gcc
@@ -32,7 +30,7 @@ all: $(PAYLOADS)
 clean:
 	rm -f fw*/*
 	@for fw in $(FIRMWARES); do \
-		for var in "" "-pro" "-baikal" "-pro-baikal"; do \
+		for var in "" "-baikal"; do \
 			if [ -d "ps4-kexec-$${fw}$${var}" ]; then \
 				cd "ps4-kexec-$${fw}$${var}" && $(MAKE) clean && cd ..; \
 			fi; \
@@ -64,8 +62,6 @@ endef
 $(foreach fw,$(FIRMWARES), \
   $(foreach sz,$(SIZES), \
     $(eval $(call make-payload-rule,$(fw),$(sz),main.c,)) \
-    $(eval $(call make-payload-rule,$(fw),$(sz),main.c,-pro)) \
     $(eval $(call make-payload-rule,$(fw),$(sz),main-baikal.c,-baikal)) \
-    $(eval $(call make-payload-rule,$(fw),$(sz),main-baikal.c,-pro-baikal)) \
   ) \
 )

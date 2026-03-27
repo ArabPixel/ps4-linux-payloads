@@ -68,6 +68,7 @@
 #define kern_off_pstate_before_shutdown 0x20734E
 #define kern_off_set_nclk_mem_spd 0x19A390
 
+// 7.00, 7.01, 7.02
 #elif defined PS4_7_00 //tihmstar EchoStretch
 #define kern_off_printf 0x0BC730
 #define kern_off_snprintf 0x0BCA30
@@ -77,7 +78,7 @@
 #define kern_off_kmem_alloc_contig 0x430780
 #define kern_off_kmem_free 0x1172C0
 #define kern_off_pmap_extract 0x3DED30
-#define kern_off_pmap_protect 0x3DFF70
+#define kern_off_pmap_protect 0x3DFF80
 #define kern_off_sched_pin 0x329870
 #define kern_off_sched_unpin 0x329890
 #define kern_off_smp_rendezvous 0x4447A0
@@ -102,39 +103,39 @@
 #define kern_off_set_cu_power_gate 0x4F5D20
 #define kern_off_pstate_before_shutdown 0x2CDD6E
 
-#elif defined PS4_7_02 //tihmstar EchoStretch
-#define kern_off_printf 0x0BC730
-#define kern_off_snprintf 0x0BCA30
-#define kern_off_copyin 0x02F230
-#define kern_off_copyout 0x02F140
-#define kern_off_copyinstr 0x02F6E0
-#define kern_off_kmem_alloc_contig 0x430780
-#define kern_off_kmem_free 0x1172C0
-#define kern_off_pmap_extract 0x3DED30
-#define kern_off_pmap_protect 0x3E18A0
-#define kern_off_sched_pin 0x329870
-#define kern_off_sched_unpin 0x329890
-#define kern_off_smp_rendezvous 0x4447A0
-#define kern_off_smp_no_rendevous_barrier 0x444560
-#define kern_off_icc_query_nowait 0x3B2F80
-#define kern_off_kernel_map 0x21C8EE0
-#define kern_off_sysent 0x1125660
-#define kern_off_kernel_pmap_store 0x22c5268
+#elif defined PS4_7_50 //ArabPixel
+#define kern_off_printf 0x26F740
+#define kern_off_snprintf 0x26FA40
+#define kern_off_copyin 0x28F9F0
+#define kern_off_copyout 0x28F900
+#define kern_off_copyinstr 0x28FEA0
+#define kern_off_kmem_alloc_contig 0x49DF40
+#define kern_off_kmem_free 0x1755B0
+#define kern_off_pmap_extract 0x1A6D70
+#define kern_off_pmap_protect 0x1A7F20
+#define kern_off_sched_pin 0x191410
+#define kern_off_sched_unpin 0x191430
+#define kern_off_smp_rendezvous 0x26CEC0
+#define kern_off_smp_no_rendevous_barrier 0x26CC90
+#define kern_off_icc_query_nowait 0x1629D0
+#define kern_off_kernel_map 0x21405B8
+#define kern_off_sysent 0x1122340
+#define kern_off_kernel_pmap_store 0x215EA40
 #define kern_off_Starsha_UcodeInfo 0
-#define kern_off_gpu_devid_is_9924 0x4EE3C0
-#define kern_off_gc_get_fw_info 0x4F6830
-#define kern_off_pml4pml4i 0x22C5258
-#define kern_off_dmpml4i 0x22C525C
-#define kern_off_dmpdpi 0x22C5260
-#define kern_off_eap_hdd_key 0x26E0CD0
-#define kern_off_edid 0x27645E0
-#define kern_off_wlanbt 0x0DECB0
-#define kern_off_kern_reboot 0x2CD780
-#define kern_off_set_gpu_freq 0x4F5350
-#define kern_off_set_pstate 0x4EF6C0
-#define kern_off_update_vddnp 0x4F5910
-#define kern_off_set_cu_power_gate 0x4F5D20
-#define kern_off_pstate_before_shutdown 0x2CDD6E
+#define kern_off_gpu_devid_is_9924 0x4E4560
+#define kern_off_gc_get_fw_info 0x4F8FE0
+#define kern_off_pml4pml4i 0x215EA30
+#define kern_off_dmpml4i 0x215EA34
+#define kern_off_dmpdpi 0x215EA38
+#define kern_off_eap_hdd_key 0x26D4C90
+#define kern_off_edid 0x275C0D0
+#define kern_off_wlanbt 0x0E3B70
+#define kern_off_kern_reboot 0xD28E0
+#define kern_off_set_gpu_freq 0x4F7AF0
+#define kern_off_set_pstate 0x4D2720
+#define kern_off_update_vddnp 0x4F80C0
+#define kern_off_set_cu_power_gate 0x4F84D0
+#define kern_off_pstate_before_shutdown 0xD2ED0
 
 #elif defined PS4_9_00 //codedwrench
 #define kern_off_printf	0x0B7A30
@@ -381,6 +382,7 @@
 #define kern_off_pstate_before_shutdown 0x198670
 #define kern_off_set_nclk_mem_spd 0x2f56c0
 
+// 11.50 & 11.52
 #elif defined PS4_11_50 //BestPig
 #define kern_off_printf 0x2e01a0
 #define kern_off_snprintf 0x2e04a0
@@ -416,6 +418,7 @@
 #define kern_off_pstate_before_shutdown 0x3a2120
 #define kern_off_set_nclk_mem_spd 0
 
+// 12.00 & 12.02
 #elif defined PS4_12_00 //bestpig
 #define kern_off_printf 0x2e03e0
 #define kern_off_snprintf 0x2e06e0
@@ -451,6 +454,7 @@
 #define kern_off_pstate_before_shutdown 0x3a2360
 #define kern_off_set_nclk_mem_spd 0
 
+// 12.50 & 12.52
 #elif defined PS4_12_50 //ArabPixel
 #define kern_off_printf 0x2E0420
 #define kern_off_snprintf 0x2E0720

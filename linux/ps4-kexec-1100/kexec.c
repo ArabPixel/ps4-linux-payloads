@@ -79,20 +79,32 @@ int sys_kexec(void *td, struct sys_kexec_args *uap)
 
     // Set gpu frequencies and pstate   
     //                      FAT&SLIM / PRO
+    if (kern.gpu_devid_is_9924()){
+        // PS4 PRO
+        kern.set_gpu_freq(1, 853); //673 //853
+        kern.set_gpu_freq(2, 711); //610 //711
+        kern.set_gpu_freq(4, 911); //800 //911
+        kern.set_gpu_freq(5, 800); //711 //800
+        kern.set_gpu_freq(6, 984); //711 //984
+        
+        kern.set_cu_power_gate(0x24);
+    }else{
+        kern.set_pstate(3);
+        kern.set_gpu_freq(0, 800); //800 //800
+        kern.set_gpu_freq(1, 673); //673 //853
+        kern.set_gpu_freq(2, 609); //610 //711
+        kern.set_gpu_freq(4, 800); //800 //911
+        kern.set_gpu_freq(5, 711); //711 //800
+        kern.set_gpu_freq(6, 711); //711 //984
+
+        kern.set_cu_power_gate(0x12);
+    }
+    // Both PRO & FAT/SLIM
     kern.set_pstate(3);
-    kern.set_nclk_mem_spd(8);
-
     kern.set_gpu_freq(0, 800); //800 //800
-    kern.set_gpu_freq(1, 673); //673 //853
-    kern.set_gpu_freq(2, 609); //610 //711
     kern.set_gpu_freq(3, 800); //800 //800
-    kern.set_gpu_freq(4, 800); //800 //911
-    kern.set_gpu_freq(5, 711); //711 //800
-    kern.set_gpu_freq(6, 711); //711 //984
     kern.set_gpu_freq(7, 673); //673 //673
-
     kern.update_vddnp(0x12);
-    kern.set_cu_power_gate(0x12);
 
     // Copy in kernel image
     image = kernel_alloc_contig(uap->image_size);
