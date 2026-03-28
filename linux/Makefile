@@ -1,11 +1,11 @@
 FIRMWARES = 505 672 700 750 800 850 900 903 960 1000 1050 1100 1102 1150 1200 1250 1300 1302
-SIZES     = 256mb 512mb 1gb 2gb 3gb 4gb
+SIZES_MB  = 128 256 512 1024 2048 3072 4096
 
 # Generate payload targets automatically
 PAYLOADS = $(foreach fw,$(FIRMWARES), \
-             $(foreach sz,$(SIZES), \
-               fw$(fw)/payload-$(fw)-$(sz).bin \
-               fw$(fw)/payload-$(fw)-$(sz)-baikal.bin))
+             $(foreach sz,$(SIZES_MB), \
+               fw$(fw)/payload-$(fw)-$(sz)mb.bin \
+               fw$(fw)/payload-$(fw)-$(sz)mb-baikal.bin))
 
 # Common compiler flags
 CC = gcc
@@ -14,7 +14,7 @@ LDFLAGS = -Wl,-gc-sections
 
 # VRAM size flags - value passed as MB to allow sub-1GB sizes (256/512 MB)
 define VRAM_FLAGS
-$(if $(filter 256mb,$(1)),-DVRAM_MB_DEFAULT=256,$(if $(filter 512mb,$(1)),-DVRAM_MB_DEFAULT=512,$(if $(filter 1gb,$(1)),-DVRAM_MB_DEFAULT=1024,$(if $(filter 2gb,$(1)),-DVRAM_MB_DEFAULT=2048,$(if $(filter 3gb,$(1)),-DVRAM_MB_DEFAULT=3072,$(if $(filter 4gb,$(1)),-DVRAM_MB_DEFAULT=4096))))))
+# No longer needed, but kept for reference if legacy support is required
 endef
 
 # Firmware version formatting helper (handles both 3-digit and 4-digit versions)
@@ -52,15 +52,21 @@ ps4-kexec-%/kexec.bin:
 	file $@ | fgrep -q '$@: DOS executable (COM)'
 
 # Template function to generate rules
-# Usage: $(call make-payload-rule,firmware,size,main-source,variant-suffix)
+# Usage: $(call make-payload-rule,firmware,size_in_mb,main-source,variant-suffix)
 define make-payload-rule
-fw$(1)/payload-$(1)-$(2)$(4).elf: ../lib/lib.a $(3) ps4-kexec-$(1)$(4)/kexec.bin
-	$(CC) $(CFLAGS) ../lib/lib.a -D__$(call FW_VERSION,$(1))__ -DPS4_$(call FW_VERSION,$(1)) $(call VRAM_FLAGS,$(2)) $(3) $(LDFLAGS) -o $$@
+fw$(1)/payload-$(1)-$(2)mb$(4).elf: ../lib/lib.a $(3) ps4-kexec-$(1)$(4)/kexec.bin
+	@mkdir -p fw$(1)
+	$(CC) $(CFLAGS) ../lib/lib.a \
+		-D__$(call FW_VERSION,$(1))__ -DPS4_$(call FW_VERSION,$(1)) \
+		-DVRAM_MB_DEFAULT=$(2) \
+		-DVRAM_MB_MIN=32 \
+		-DVRAM_MB_MAX=4096 \
+		$(3) $(LDFLAGS) -o $$@
 endef
 
 # Generate all rules for each firmware
 $(foreach fw,$(FIRMWARES), \
-  $(foreach sz,$(SIZES), \
+  $(foreach sz,$(SIZES_MB), \
     $(eval $(call make-payload-rule,$(fw),$(sz),main.c,)) \
     $(eval $(call make-payload-rule,$(fw),$(sz),main-baikal.c,-baikal)) \
   ) \

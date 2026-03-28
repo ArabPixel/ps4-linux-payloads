@@ -42,6 +42,9 @@ Control VRAM size via a plain text file containing a number in **MB** (not GB).
 
 | vram.txt value | VRAM allocated | Payload suffix |
 |:-:|:-:|:-:|
+| `32`  | 32 MB  | `-32mb`  |
+| `64`  | 64 MB  | `-64mb`  |
+| `128` | 128 MB | `-128mb` |
 | `256` | 256 MB | `-256mb` |
 | `512` | 512 MB | `-512mb` |
 | `1024` | 1 GB | `-1gb` |
@@ -49,17 +52,17 @@ Control VRAM size via a plain text file containing a number in **MB** (not GB).
 | `3072` | 3 GB | `-3gb` |
 | `4096` | 4 GB | `-4gb` |
 
-Default is 1024 MB (1 GB) if vram.txt is missing or invalid. Minimum is 256 MB.
+Default is 1024 MB (1 GB) if vram.txt is missing or invalid. Minimum is **32 MB**.
 
-> **Note:** 128 MB is not supported — still under testing
+> **Note:** 32 MB and 64 MB VRAM payloads work (tested on Aeolia/Belize). These are not included in the default precompiled releases, but you can compile them yourself by editing the `SIZES_MB` variable in the Makefile.
 
-## Server Use (256MB / 512MB VRAM)
+## Server Use (Low VRAM Payloads)
 
-- **Why 256MB and 512MB?** The idea behind these low VRAM payloads is for users who are repurposing the PS4 as a server for RAM and CPU intensive tasks. If you're just running server stuff headless, you don't need 1GB+ of memory wasted on the GPU. Using these payloads frees up that shared unified memory to be used as regular system RAM instead. 
+- **Why 32MB, 64MB, 128MB, 256MB, 512MB?** The idea behind these low VRAM payloads is for users who are repurposing the PS4 as a server for RAM and CPU intensive tasks. If you're just running server stuff headless, you don't need 1GB+ of memory wasted on the GPU. Using these payloads frees up that shared unified memory to be used as regular system RAM instead. 
 
 - **How to use:** 
-  - **Option 1:** Just run the 256mb or 512mb payloads. 
-  - **Option 2:** Just add `256` or `512` into your `vram.txt` file to set it manually. Don't use these if you plan on gaming or using heavy desktop graphics!
+  - **Option 1:** Just run the payload with the desired VRAM size (e.g. `-32mb`, `-64mb`, etc.).
+  - **Option 2:** Add the value (e.g. `32`, `64`, `128`, etc.) into your `vram.txt` file to set it manually. Don't use these if you plan on gaming or using heavy desktop graphics!
 
 ## Note 
 * Use .elf`s files instead of .bin whenever possible as they provide a better success rate. 
@@ -74,6 +77,7 @@ Baikal: ``console=uart8250,mmio32,0xC890E000``
 ## How to Compile
     git clone https://github.com/ArabPixel/ps4-linux-payloads
     cd ps4-linux-payloads/linux
+    # Edit the Makefile SIZES_MB variable to add 32 or 64 if you want those payloads
     make
 
 
@@ -88,7 +92,8 @@ Baikal: ``console=uart8250,mmio32,0xC890E000``
 
 ## Change log
 
-- Sub-1GB VRAM payloads – Added 256mb and 512mb payload sizes for PS4 used as a headless server where GPU memory is largely unused. Set `vram.txt` to `256` or `512` (MB) to use them. [v22](https://github.com/ArabPixel/ps4-linux-payloads/releases/tag/v22)
+- Sub-1GB VRAM payloads – Added 128mb, 256mb and 512mb payload sizes for PS4 used as a headless server where GPU memory is largely unused. Set `vram.txt` to `128`, `256` or `512` (MB) to use them. [v22](https://github.com/ArabPixel/ps4-linux-payloads/releases/tag/v22)
+- **128MB VRAM payloads are now supported (compile yourself by editing Makefile).**
 
 - PS4 12.5x, 13.0x Support. [v21.5](https://github.com/ArabPixel/ps4-linux-payloads/releases/tag/v21.5)
 
