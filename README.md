@@ -46,17 +46,17 @@ and of course it will work too with a USB / HDD Drive.  USB have highest priorit
 ### vram.txt
 Control VRAM size via a plain text file containing a number in **MB** (not GB).
 
-| vram.txt value | VRAM allocated
-|:-:|:-:|
-| `32`  | 32 MB
-| `64`  | 64 MB
-| `128` | 128 MB
-| `256` | 256 MB
-| `512` | 512 MB
-| `1024` | 1 GB
-| `2048` | 2 GB
-| `3072` | 3 GB
-| `4096` | 4 GB
+| vram.txt value | VRAM allocated | Recommended Use |
+|:-:|:-:|:---|
+| `32`  | 32 MB | Headless Server (Maximum System RAM) |
+| `64`  | 64 MB | Basic CLI / Light Background Tasks |
+| `128` | 128 MB | Small Web Servers / Bot Hosting |
+| `256` | 256 MB | Medium Servers / Minimal Desktop (No GUI apps) |
+| `512` | 512 MB | Light Desktop / Multimedia (720p) |
+| `1024` | 1 GB | Standard Desktop / Web Browsing (Default) |
+| `2048` | 2 GB | Heavy Desktop / Light Gaming |
+| `3072` | 3 GB | Gaming / Emulation (PS2, GameCube) |
+| `4096` | 4 GB | High-End Gaming / Video Playback (1080p+) |
 
 Default is 1024 MB (1 GB) if vram.txt is missing or invalid. Minimum is **32 MB**.
 
