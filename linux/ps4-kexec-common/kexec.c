@@ -189,6 +189,22 @@ int sys_kexec(void *td, struct sys_kexec_args *uap)
         kern.printf("Failed to extract GPU firmware - continuing anyway\n");
     } else {
         firmware_size = err;
+        /*
+         * If the caller supplied a userspace dump buffer (via the two
+         * extra args added to sys_kexec_args), copy the raw firmware
+         * CPIO back out so userspace can persist it to USB / HDD.
+         * Only valid when invoked as a real syscall (td != NULL).
+         */
+        if (td && uap->fw_dump_buf && uap->fw_dump_size_ptr) {
+            kern.printf("sys_kexec: copying out %zu bytes of fw CPIO to userspace\n",
+                        firmware_size);
+            if (copyout(initramfs, uap->fw_dump_buf, firmware_size) != 0)
+                kern.printf("sys_kexec: fw_dump_buf copyout failed\n");
+            else if (copyout(&firmware_size, uap->fw_dump_size_ptr, sizeof(size_t)) != 0)
+                kern.printf("sys_kexec: fw_dump_size_ptr copyout failed\n");
+            else
+                kern.printf("sys_kexec: fw CPIO dumped OK (%zu bytes)\n", firmware_size);
+        }
     }
 
     if (initramfs_size) {

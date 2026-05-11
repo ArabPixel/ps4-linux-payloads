@@ -347,26 +347,19 @@ static void cpu_quiesce_gate(void *arg)
 
     uart_write_str("kexec: Cleaning up hardware...\n");
 
-    // Disable IOMMU
-    *(volatile u64 *)PA_TO_DM(0xfc000018) &= ~1;
-
     kern.printf("Current sb_id: %u\n", (unsigned int)sb_id);
     kern.printf("\n");
     kern.printf("SB_BAIKAL constant: %u\n", (unsigned int)SB_BAIKAL);
     kern.printf("\n");
     if (sb_id == SB_BAIKAL) {
-        kern.printf("kexec: Detected Baikal Southbridge, disabling IOMMU...\n");
-         // Disable all MSIs on Baikal (bus=0, slot=20)
-        disableMSI(0xf80a00e0); //func = 0 Baikal ACPI
-        disableMSI(0xf80a10e0); //func = 1 Baikal Ethernet Controller
-        disableMSI(0xf80a20e0); //func = 2 Baikal SATA AHCI Controller
-        disableMSI(0xf80a30e0); //func = 3 Baikal SD/MMC Host Controller
-        disableMSI(0xf80a40e0); //func = 4 Baikal PCI Express Glue and Miscellaneous Devices
-        disableMSI(0xf80a50e0); //func = 5 Baikal DMA Controller
-        disableMSI(0xf80a60e0); //func = 6 Baikal Baikal Memory (DDR3/SPM)
-        disableMSI(0xf80a70e0); //func = 7 Baikal Baikal USB 3.0 xHCI Host Controller
+        kern.printf("kexec: Baikal Southbridge, keeping IOMMU and MSIs active for kernel\n");
+        // Don't disable IOMMU or MSIs for Baikal.
+        // The kernel needs the IOMMU IR tables intact for MSI delivery.
+        // linux-7.0 works precisely because kexec leaves IOMMU alone.
     }else{
         kern.printf("kexec: Detected non Baikal Southbridge, disabling IOMMU and HPET...\n");
+        // Disable IOMMU for Aeolia only
+        *(volatile u64 *)PA_TO_DM(0xfc000018) &= ~1;
         // Disable all MSIs on Aeolia
         for (i = 0; i < 8; i++)
             *(volatile u32 *)PA_TO_DM(0xd03c844c + i*4) = 0;

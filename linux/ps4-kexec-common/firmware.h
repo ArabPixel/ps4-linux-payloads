@@ -54,7 +54,7 @@
 #define FW_HEADER_SIZE 256
 
 // Leave space for 16 files (currently 12)
-#define FW_CPIO_SIZE (EAP_HDD_KEY_SIZE /* + EDID_SIZE */ + (CPIO_HEADER_SIZE * 16) + FW_CE_SIZE + FW_ME_SIZE + \
+#define FW_CPIO_SIZE (EAP_HDD_KEY_SIZE + EDID_SIZE + (CPIO_HEADER_SIZE * 16) + FW_CE_SIZE + FW_ME_SIZE + \
                        FW_MEC_SIZE + FW_MEC2_SIZE + FW_PFP_SIZE + \
                        FW_RLC_SIZE + FW_SDMA_SIZE + FW_SDMA1_SIZE + \
                        FW_HEADER_SIZE * 8)

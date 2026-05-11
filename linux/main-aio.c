@@ -145,11 +145,18 @@ static void get_kexec_blob(u16 norm_fw, char **start, char **end)
 
 // Platform-specific helper functions for AIO launch
 
+/*
+ * Syscall 153 trampoline.  Args 1-6 go in the standard registers; args 7-8
+ * (fw_dump_buf, fw_dump_size_ptr) are pushed on the user stack by the C
+ * caller and picked up by the FreeBSD kernel's amd64 syscall entry path.
+ * The asm stub itself is identical to before — no stack manipulation needed.
+ */
 asm("kexec_load:\nmov %rcx, %r10\nmov $153, %rax\nsyscall\nret");
 
 int kexec_load(char *kernel, unsigned long long kernel_size,
                char *initrd,  unsigned long long initrd_size,
-               char *cmdline, int vram_mb);
+               char *cmdline, int vram_mb,
+               void *fw_dump_buf, size_t *fw_dump_size_ptr);
 
 int read_file(char *path, char **ptr, unsigned long long *sz)
 {
@@ -170,6 +177,34 @@ int read_file(char *path, char **ptr, unsigned long long *sz)
     close(fd);
     return 0;
 }
+
+/*
+ * Write sz bytes from buf to path.  Returns 0 on success, -1 on any error.
+ * Used to persist the firmware CPIO to the same USB/HDD location as bzImage.
+ */
+static int write_file(const char *path, const void *buf, unsigned long long sz)
+{
+    int fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0) return -1;
+    const char *p = (const char *)buf;
+    while (sz) {
+        long long n = write(fd, p, sz);
+        if (n <= 0) { close(fd); return -1; }
+        p  += (unsigned long long)n;
+        sz -= (unsigned long long)n;
+    }
+    close(fd);
+    return 0;
+}
+
+/*
+ * Firmware CPIO dump buffer.  Filled by sys_kexec via copyout after
+ * firmware_extract().  128 KB is a safe upper bound for FW_CPIO_SIZE.
+ * In BSS so it does not inflate the binary on disk.
+ */
+#define FW_DUMP_BUF_SIZE (128 * 1024)
+static char   g_fw_dump_buf[FW_DUMP_BUF_SIZE];
+static size_t g_fw_dump_size;
 
 // evf_open, evf_cancel, evf_close - some events for reboot
 int evf_open(char *);
@@ -423,7 +458,32 @@ int main(void)
         .rtp        = NULL,
     };
     thr_new(&thr, sizeof(thr));
+    g_fw_dump_size = 0;
     kexec_load(kernel, kernel_size, initrd, initrd_size, cmdline,
-               pack_kexec_args(vram_mb, fw_ver, sb_val));
+               pack_kexec_args(vram_mb, fw_ver, sb_val),
+               g_fw_dump_buf, &g_fw_dump_size);
+
+    /*
+     * kexec_load() (sys_kexec) returns to userspace after arming the ICC
+     * hook but before the actual reboot.  If sys_kexec copied out the
+     * firmware CPIO, write it to whichever storage path is reachable —
+     * the same set we tried for bzImage so the blobs land next to it.
+     */
+    if (g_fw_dump_size > 0) {
+        log_msg("AIO: writing fw CPIO to storage...");
+#define DUMP(dir) \
+        if (write_file(dir "ps4fw.cpio", g_fw_dump_buf, g_fw_dump_size) == 0) { \
+            log_msg("AIO: fw CPIO written to " dir "ps4fw.cpio"); \
+            goto fw_dump_done; \
+        }
+        DUMP("/mnt/usb0/")
+        DUMP("/mnt/usb1/")
+        DUMP(HDD_BOOT_PATH)
+        DUMP(HDD_SECOND_BOOT_PATH)
+#undef DUMP
+        log_msg("AIO: fw CPIO write failed on all paths");
+fw_dump_done:;
+    }
+
     for (;;);
 }
