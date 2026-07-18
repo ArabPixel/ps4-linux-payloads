@@ -384,8 +384,8 @@ ssize_t firmware_extract(void *dest)
     cpio_hdr(&p, "lib", DIR, 0);
     cpio_hdr(&p, "lib/firmware", DIR, 0);
     
-    /** We need detect the size of edid first, on some monitor it is 128 on other 256 bytes, so for now remove it **/
-    int edid_sz = (((unsigned char*)kern.edid)[126]?256:128);
+    int ext_blocks = ((unsigned char*)kern.edid)[126];
+    int edid_sz = 128 * (1 + ext_blocks);
     cpio_hdr(&p, "lib/firmware/edid", DIR, 0);
     cpio_hdr(&p, "lib/firmware/edid/my_edid.bin", FILE, edid_sz);
 	copy_edid(&p, edid_sz);
